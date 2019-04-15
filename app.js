@@ -18,7 +18,14 @@ io.on("connection", function (client) {
     client.on("manual-disconnection", function(data) {
       console.log("User Manually Disconnected. \n\tTheir ID: " + data);
     });
-
+    client.on("list", function(name){
+      clients[client.id] = name;
+      Object.keys(io.sockets.sockets).forEach(function(name){
+        console.log("User:" + name);
+        clients[client.id] = name;
+        io.emit("update", name + " is connected to the server.")
+      })
+    });
     client.on("send", function(msg){
     	console.log("Message: " + msg);
         client.broadcast.emit("chat", clients[client.id], msg);

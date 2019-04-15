@@ -21,6 +21,10 @@ $(document).ready(function(){
     socket.close();
   }
 
+  function ListofUsers(){
+    socket.emit("list", name);
+  }
+
 	$("#textarea").keypress(function(e){
         if(e.which == 13) {
         var text1 = $("#textarea").val();
@@ -33,9 +37,8 @@ $(document).ready(function(){
           if(text1.indexOf('list') >= 0){
             $("#textarea").val('');
             var time = new Date();
-            var users = io.sockets.adapter.rooms[''];
-            $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text1 + users + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
-            socket.emit("send", text1);
+            $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text1 + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
+            ListofUsers();
           }
           if(text1.indexOf('send -all') >= 0){
             var text = text1.slice(9);
@@ -43,9 +46,9 @@ $(document).ready(function(){
             var time = new Date();
   			    $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
   			    socket.emit("send", text);
-  			     // automatically scroll down
-  			    document.getElementById('bottom').scrollIntoView();
           }
+          // automatically scroll down
+          document.getElementById('bottom').scrollIntoView();
         }
     });
 
@@ -65,3 +68,5 @@ $(document).ready(function(){
 
 
 });
+
+//client.broadcast.to(socketid).emit('message', 'for your eyes only');
