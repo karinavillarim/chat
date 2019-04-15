@@ -38,6 +38,7 @@ $(document).ready(function(){
             $("#textarea").val('');
             var time = new Date();
             $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text1 + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
+            socket.emit("send", text1);
             ListofUsers();
           }
           if(text1.indexOf('send -all') >= 0){
