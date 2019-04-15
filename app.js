@@ -16,12 +16,8 @@ io.on("connection", function (client) {
         client.broadcast.emit("update", name + " has joined the server.")
     });
     client.on("manual-disconnection", function(data) {
-      console.log("User Manually Disconnected. \n\tTheir ID: " + name);
+      console.log("User Manually Disconnected. \n\tTheir ID: " + data);
     });
-    //client.on("users", function(data) {
-      //client.broadcast.emit("update", )
-      //console.log("Users: " + clients[client.id]);
-    //});
 
     client.on("send", function(msg){
     	console.log("Message: " + msg);
@@ -33,6 +29,7 @@ io.on("connection", function (client) {
         io.emit("update", clients[client.id] + " has left the server.");
         delete clients[client.id];
     });
+
 });
 
 
