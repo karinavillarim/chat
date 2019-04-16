@@ -12,12 +12,12 @@ $(document).ready(function(){
 		$("#time").html('First login: ' + time.getHours() + ':' + time.getMinutes());
 
 		ready = true;
-		socket.emit("join", name);
+    socket.emit("join", name);
 
 	});
 
   function ManualSocketDisconnect() {
-    socket.emit("manual-disconnection", socket.id);
+    socket.emit("manual-disconnection", name);
     socket.close();
   }
 
@@ -47,6 +47,24 @@ $(document).ready(function(){
             var time = new Date();
   			    $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
   			    socket.emit("send", text);
+          }
+          if(text1.indexOf('send -user') >= 0){
+            var text = text1.slice(11);
+            text = text.split(' ');
+            var user = text[0];
+            var mensagem = text[1];
+            $("#textarea").val('');
+            var time = new Date();
+  			    $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
+            socket.emit("send -user", text);
+          }
+          if(text1.indexOf('rename') >= 0){
+            var text = text1.slice(6);
+        	  $("#textarea").val('');
+            var time = new Date();
+  			    //$(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
+            name = text;
+            socket.emit("rename", text);
           }
           // automatically scroll down
           document.getElementById('bottom').scrollIntoView();
