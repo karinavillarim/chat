@@ -64,6 +64,8 @@ $(document).ready(function(){
             var time = new Date();
   			    //$(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
             name = text;
+            $("#name").html(name);
+            $("#nickname").val() = name;
             socket.emit("rename", text);
           }
           // automatically scroll down
