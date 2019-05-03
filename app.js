@@ -12,14 +12,15 @@ app.get('/', function(req, res){
 
 
 io.on("connection", function (client) {
-    client.on("join", function(name){
-      var address = client.handshake.address;
-      console.log("adress = " + address);
-    	console.log("Joined: " + name);
-        clients[client.id] = name;
-        client.emit("update", "You have connected to the server.");
-        client.broadcast.emit("update", name + " has joined the server.")
-    });
+  client.on("join", function(name){
+    var endereço = client.handshake.address;
+    var porta = client.handshake.headers['x-forwarded-for'];
+    console.log("adress1 = " + endereço + " porta = " +porta);
+    console.log("Joined: " + name);
+      clients[client.id] = name;
+      client.emit("update", "You have connected to the server.");
+      client.broadcast.emit("update", name + " has joined the server.")
+  });
     client.on("manual-disconnection", function(data) {
       console.log("User Manually Disconnected. \n\tTheir ID: " + data);
     });
@@ -39,8 +40,21 @@ io.on("connection", function (client) {
       //console.log("endereço: ", address);
     });
     client.on("send -user", function(msg){
-    	console.log("Message: " + msg);
-      client.in(msg[0]).emit("update", msg[1]);
+      var nome = msg[0]
+      msg.shift();
+      msg = msg.join(" ");
+      console.log("Message 0: " + nome + " Mensagem 1 = " + msg);
+      var id;
+      var name;
+      Object.keys(io.sockets.sockets).forEach(function(name){
+        //clients[client.id] = name;
+        if(clients[name] == nome){
+          id = name
+          console.log("User: " + nome + " ID: " +id);
+        }
+      })
+      //client.in(id).emit("update", msg);
+      client.broadcast.to(id).emit("chat",clients[client.id], msg);
     });
     client.on("rename", function(name){
       console.log("Previous username: " + clients[client.id]);

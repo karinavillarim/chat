@@ -51,12 +51,14 @@ $(document).ready(function(){
           if(text1.indexOf('send -user') >= 0){
             var text = text1.slice(11);
             text = text.split(' ');
-            var user = text[0];
-            var mensagem = text[1];
+            var user = text1.slice(11);
+            socket.emit("send -user", text);
+            var mensagem = text;
+            mensagem.shift();
+            mensagem = mensagem.join(" ");
             $("#textarea").val('');
             var time = new Date();
-  			    $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
-            socket.emit("send -user", text);
+  			    $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + mensagem + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
           }
           if(text1.indexOf('rename') >= 0){
             var text = text1.slice(6);
@@ -64,9 +66,9 @@ $(document).ready(function(){
             var time = new Date();
   			    //$(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
             name = text;
+            socket.emit("rename", text);
             $("#name").html(name);
             $("#nickname").val() = name;
-            socket.emit("rename", text);
           }
           // automatically scroll down
           document.getElementById('bottom').scrollIntoView();
