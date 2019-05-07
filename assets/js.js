@@ -69,6 +69,9 @@ $(document).ready(function(){
             name = text;
             socket.emit("rename", text);
           }
+          else {
+            alert("Command invalid.");
+          }
           // automatically scroll down
           document.getElementById('bottom').scrollIntoView();
         }
@@ -85,6 +88,7 @@ $(document).ready(function(){
     	if (ready) {
 				var time = new Date();
 				$(".chat").append('<li class="field"><div class="msg"><span>' + client + ':</span><p>' + msg + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
+        document.getElementById('bottom').scrollIntoView();
       }
     });
 
@@ -103,6 +107,8 @@ $(document).ready(function(){
       window.location.reload();
       window.onload;
     });
+
+
 
 
 });
