@@ -33,6 +33,7 @@ $(document).ready(function(){
             var time = new Date();
   			    $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text1 + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
             ManualSocketDisconnect();
+            window.location.reload();
           }
           if(text1.indexOf('list') >= 0){
             $("#textarea").val('');
@@ -61,14 +62,12 @@ $(document).ready(function(){
   			    $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + mensagem + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
           }
           if(text1.indexOf('rename') >= 0){
-            var text = text1.slice(6);
+            var text = text1.slice(7);
         	  $("#textarea").val('');
             var time = new Date();
   			    //$(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
             name = text;
             socket.emit("rename", text);
-            $("#name").html(name);
-            $("#nickname").val() = name;
           }
           // automatically scroll down
           document.getElementById('bottom').scrollIntoView();
@@ -87,6 +86,22 @@ $(document).ready(function(){
 				var time = new Date();
 				$(".chat").append('<li class="field"><div class="msg"><span>' + client + ':</span><p>' + msg + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
       }
+    });
+
+    socket.on("mudar-nome", function(name){
+      $("#name").html(name);
+      $("#nickname").val() = name;
+    });
+
+    socket.on("exibe-ip", function(mensagem){
+        $("#endereço").html(mensagem);
+    });
+
+    socket.on("att", function(msg){
+      socket.close();
+      alert("This username has already been taken. Press OK and try again.");
+      window.location.reload();
+      window.onload;
     });
 
 
