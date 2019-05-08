@@ -57,7 +57,7 @@ io.on("connection", function (client) {
         //clients[client.id] = name;
         name = clients[name];
         console.log("User: " + name);
-        io.emit("update", name + " is connected to the server.")
+        client.emit("update", name + " is connected to the server.")
       })
     });
     client.on("send", function(msg){
@@ -67,9 +67,9 @@ io.on("connection", function (client) {
       //console.log("Message: " + msg);
       var name = clients[client.id];
       var mensagem = msg;
-      mensagem = endereço + ":" + porta + "/" + name + ": " + msg;
+      mensagem = endereço + " : " + porta;
       console.log(mensagem);
-      client.broadcast.emit("chat", clients[client.id], msg);
+      client.broadcast.emit("chat", clients[client.id], msg,mensagem);
     });
     client.on("send -user", function(msg){
       var endereço = client.request.connection.remoteAddress;
@@ -80,7 +80,7 @@ io.on("connection", function (client) {
       msg = msg.join(" ");
       var name1 = clients[client.id];
       //console.log("Message 0: " + nome + " Mensagem 1 = " + msg);
-      mensagem = endereço + ":" + porta + "/" + name1 + ": send -user " + nome + " " + msg;
+      mensagem = endereço + " : " + porta //+ "/" + name1 + ": send -user " + nome + " " + msg;
       console.log(mensagem);
       var id;
       var name;

@@ -27,6 +27,7 @@ $(document).ready(function(){
 
 	$("#textarea").keypress(function(e){
         if(e.which == 13) {
+          var i = 0;
         var text1 = $("#textarea").val();
           if(text1.indexOf('bye') >= 0){
         	  $("#textarea").val('');
@@ -34,22 +35,19 @@ $(document).ready(function(){
   			    $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text1 + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
             ManualSocketDisconnect();
             window.location.reload();
-          }
-          if(text1.indexOf('list') >= 0){
-            $("#textarea").val('');
-            var time = new Date();
-            $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text1 + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
-            socket.emit("send", text1);
-            ListofUsers();
-          }
-          if(text1.indexOf('send -all') >= 0){
+          }else if(text1.indexOf('list') >= 0){
+              $("#textarea").val('');
+              var time = new Date();
+              $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text1 + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
+              //socket.emit("send", text1);
+              ListofUsers();
+          }else if(text1.indexOf('send -all') >= 0){
             var text = text1.slice(9);
         	  $("#textarea").val('');
             var time = new Date();
   			    $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
   			    socket.emit("send", text);
-          }
-          if(text1.indexOf('send -user') >= 0){
+          } else if(text1.indexOf('send -user') >= 0){
             var text = text1.slice(11);
             text = text.split(' ');
             var user = text1.slice(11);
@@ -60,18 +58,18 @@ $(document).ready(function(){
             $("#textarea").val('');
             var time = new Date();
   			    $(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + mensagem + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
-          }
-          if(text1.indexOf('rename') >= 0){
+          } else if(text1.indexOf('rename') >= 0){
             var text = text1.slice(7);
         	  $("#textarea").val('');
             var time = new Date();
   			    //$(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
             name = text;
             socket.emit("rename", text);
-          }
-          else {
+
+          }else {
             alert("Command invalid.");
           }
+
           // automatically scroll down
           document.getElementById('bottom').scrollIntoView();
         }
@@ -84,13 +82,12 @@ $(document).ready(function(){
     	}
     });
 
-    socket.on("chat", function(client,msg) {
-    	if (ready) {
-				var time = new Date();
-				$(".chat").append('<li class="field"><div class="msg"><span>' + client + ':</span><p>' + msg + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
-        document.getElementById('bottom').scrollIntoView();
-      }
-    });
+    socket.on("chat", function(client,msg,config) {
+    if (ready) {
+      var time = new Date();
+      $(".chat").append('<li class="field"><div class="msg"><span>' +"/"+config+"/ "+ client + ':</span><p>' + msg + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
+    }
+  });
 
     socket.on("mudar-nome", function(name){
       $("#name").html(name);
